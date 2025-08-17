@@ -1,4 +1,3 @@
-
 import "dotenv/config";
 import express from "express";
 import helmet from "helmet";
@@ -16,7 +15,14 @@ import { notFound, errorHandler } from "./middleware/error.middleware.js";
 const app = express();
 
 // Security & common middleware
-app.use(helmet());
+// FIX: Configure Helmet to allow connections to the API
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      "connect-src": ["'self'", "https://task-7-iftq.onrender.com"],
+    },
+  },
+}));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
